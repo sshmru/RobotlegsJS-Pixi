@@ -92,26 +92,26 @@ export class MediatorViewHandler implements IViewHandler {
         var mapping: IMediatorMapping;
 
         // we've seen this type before and nobody was interested
-        if (this._knownMappings[type] === false)
+        if (this._knownMappings.get(type) === null)
             return null;
 
         // we haven't seen this type before
-        if (this._knownMappings[type] == undefined) {
-            this._knownMappings[type] = false;
+        if (this._knownMappings.get(type) == undefined) {
+            this._knownMappings.set(type, null);
             for (let i in this._mappings) {
                 let mapping: IMediatorMapping = this._mappings[i];
                 if (mapping.matcher.matches(item)) {
-                    if (!this._knownMappings[type])
-                        this._knownMappings[type] = [];
-                    this._knownMappings[type].push(mapping);
+                    if (!this._knownMappings.get(type))
+                        this._knownMappings.set(type, []);
+                    this._knownMappings.get(type).push(mapping);
                 }
             }
             // nobody cares, let's get out of here
-            if (this._knownMappings[type] === false)
+            if (this._knownMappings.get(type) === null)
                 return null;
         }
 
         // these mappings really do care
-        return this._knownMappings[type];
+        return this._knownMappings.get(type);
     }
 }
